@@ -1,0 +1,3 @@
+[submodule "repos/bitcoin-abe"]
+	path = repos/bitcoin-abe
+	url = ../repos/bitcoin-abe/
