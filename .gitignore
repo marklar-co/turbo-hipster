@@ -1,3 +1,4 @@
 *.swp
 .vagrant/
 guest_logs/
+repos/
