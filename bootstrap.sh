@@ -36,7 +36,7 @@ apt-get install -y mysql-server-5.5
 
 # Python stuff
 echo_log "getting Python stuff"
-apt-get install -y python2.7 python-crypto python-mysqldb
+apt-get install -y python2.7 python-crypto python-mysqldb python-pip
 
 # Dogecoin
 echo_log "prepping dogecoin stuff"
