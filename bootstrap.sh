@@ -51,6 +51,10 @@ sudo -H -u vagrant "$dogecoin_target_dir/dogecoind" #note the -H... important
 echo "Sleeping a while to let dogecoind get going..."
 sleep 5
 
+# Prep abe
+echo_log "Set up DB"
+mysql -u root < /vagrant/setup_mysql.sql
+
 echo_log "dogecoind progress: $(tail /home/vagrant/.dogecoin/testnet3/debug.log || true)"
 echo_log "current procs: $(ps -aux)"
 echo_log "current df: $(df -h /)"
