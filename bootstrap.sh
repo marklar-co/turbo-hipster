@@ -37,6 +37,7 @@ apt-get install -y mysql-server-5.5
 # Python stuff
 echo_log "getting Python stuff"
 apt-get install -y python2.7 python-crypto python-mysqldb python-pip
+apt-get install -y python-dev # needed for things like building python profiling
 
 # Dogecoin
 echo_log "prepping dogecoin stuff"
