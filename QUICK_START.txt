@@ -10,7 +10,7 @@
 "2015-05-27 01:58:44 UpdateTip: new best=ffb3a4e9217c79fe8a40a2d879c7e03656afbacee39eb2dcbb17e83633890df9  height=631113  log2_work=43.524284  tx=1033363  date=2015-05-27 02:00:14 progress=1.000000"
 Keep an eye on the progress indicator. I found that if there's been too little progress here, abe freaks out, so let it reach something like 95% before continuing to the next step.
 
-5) Install abe: cd /vagrant/vagrant/repos/bitcoin-abe && sudo python setup.py install
+5) Install abe: cd /vagrant/repos/bitcoin-abe && sudo python setup.py install
 
 6) Abe needs to be run in two phases; first in "init" mode where it reads the dogecoin data directly, then in "rpc" mode where it communicates with dogecoind through rpc. For both, make sure your current working directory is /vagrant so that the abe-*.conf files are in the working directory.
 
