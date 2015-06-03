@@ -45,8 +45,10 @@ sudo -u vagrant mkdir -p /home/vagrant/.dogecoin
 sudo -u vagrant cp /vagrant/dogecoin.conf /home/vagrant/.dogecoin/.
 mkdir /opt/dogecoin
 cp /vagrant/dogecoin_bin/dogecoind-1.8.2-linux64 "$dogecoin_target_dir/dogecoind"
+cp /vagrant/dogecoin_bin/dogecoin-cli-1.8.2-linux64 "$dogecoin_target_dir/dogecoin-cli"
 chown -R vagrant:vagrant "$dogecoin_target_dir"
 chmod 755 "$dogecoin_target_dir/dogecoind"
+chmod 755 "$dogecoin_target_dir/dogecoin-cli"
 echo_log "starting dogecoind"
 sudo -H -u vagrant "$dogecoin_target_dir/dogecoind" #note the -H... important
 echo "Sleeping a while to let dogecoind get going..."
