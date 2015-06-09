@@ -23,6 +23,14 @@ echo_log "uname: $(uname -a)"
 echo_log "current procs: $(ps -aux)"
 echo_log "current df: $(df -h /)"
 
+# add 2G swap to get arround annoying ENOMEM problems (does not persist across reboot)
+echo_log "create swap"
+mkdir -p /var/cache/swap/
+dd if=/dev/zero of=/var/cache/swap/swap0 bs=1M count=2048
+chmod 0600 /var/cache/swap/swap0
+mkswap /var/cache/swap/swap0
+swapon /var/cache/swap/swap0
+
 # baseline system prep
 echo_log "base system update"
 apt-get update
@@ -38,6 +46,12 @@ apt-get install -y mysql-server-5.5
 echo_log "getting Python stuff"
 apt-get install -y python2.7 python-crypto python-mysqldb python-pip
 apt-get install -y python-dev # needed for things like building python profiling
+
+# Florincoin - must build from source
+echo_log "getting dependencies to build florincoin"
+apt-get install -y build-essential libssl-dev libdb-dev libdb++-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
+(cd /vagrant/ThirdParty/florincoin/src && make -f makefile.unix)
+
 
 # Dogecoin
 echo_log "prepping dogecoin stuff"
