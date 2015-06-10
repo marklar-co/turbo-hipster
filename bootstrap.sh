@@ -70,8 +70,8 @@ echo_log "prepping dogecoin stuff"
 sudo -u vagrant mkdir -p /home/vagrant/.dogecoin
 sudo -u vagrant cp /vagrant/dogecoin.conf /home/vagrant/.dogecoin/.
 mkdir "$dogecoin_target_dir"
-cp /vagrant/dogecoin_bin/dogecoind-1.8.2-linux64 "$dogecoin_target_dir/dogecoind"
-cp /vagrant/dogecoin_bin/dogecoin-cli-1.8.2-linux64 "$dogecoin_target_dir/dogecoin-cli"
+cp /vagrant/ThirdParty/dogecoin_bin/dogecoind-1.8.2-linux64 "$dogecoin_target_dir/dogecoind"
+cp /vagrant/ThirdParty/dogecoin_bin/dogecoin-cli-1.8.2-linux64 "$dogecoin_target_dir/dogecoin-cli"
 chown -R vagrant:vagrant "$dogecoin_target_dir"
 chmod 755 "$dogecoin_target_dir/dogecoind"
 chmod 755 "$dogecoin_target_dir/dogecoin-cli"
