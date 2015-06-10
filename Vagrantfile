@@ -20,8 +20,6 @@ Vagrant.configure(2) do |config|
     vb.memory = "1024"
   end
 
-  config.vm.network "public_network"
-
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
