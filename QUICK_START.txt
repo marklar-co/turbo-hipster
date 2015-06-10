@@ -1,5 +1,5 @@
 -1) Get submodules by issuing the following commands:
-git submodule init
+git submodule sync --recursive
 git submodule update --init --recursive
 
 0) Clone bitcoin-abe into the repos subdir, e.g. `cd repos && git clone git@github.com:bitcoin-abe/bitcoin-abe.git`.
