@@ -1,0 +1,3 @@
+[submodule "ThirdParty/florincoin"]
+	path = ThirdParty/florincoin
+	url = git@github.com:florincoin/florincoin.git
