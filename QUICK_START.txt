@@ -1,3 +1,7 @@
+-1) Get submodules by issuing the following commands:
+git submodule sync --recursive
+git submodule update --init --recursive
+
 0) Clone bitcoin-abe into the repos subdir, e.g. `cd repos && git clone git@github.com:bitcoin-abe/bitcoin-abe.git`.
 
 1) I suggest you install VirtualBox (from a website download) then `brew install vagrant`, then try a simple vagrant tutorial (http://docs.vagrantup.com/v2/getting-started/index.html is good and does not take long, just spend like 10-20 minutes on this excluding time downloading VM images) to familiarise yourself with it, then run `vagrant up`. If you encountered any errors with vagrant up, save the terminal output and guest_logs/vagrant_mmc_bootstrap.log.
