@@ -101,6 +101,7 @@ sleep 5
 # Prep abe
 echo_log "Set up DB"
 mysql -u root < /vagrant/setup_mysql.sql
+(cd /vagrant/ThirdParty/abe && python setup.py install)
 
 echo_log "florincoind progress: $(tail /home/vagrant/.florincoin/testnet/debug.log || true)"
 echo_log "dogecoind progress: $(tail /home/vagrant/.dogecoin/testnet3/debug.log || true)"
