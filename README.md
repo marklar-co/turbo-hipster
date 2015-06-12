@@ -19,11 +19,13 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
 
 5. Check that dogecoind/florincoind is running, with
     ```
+    ps aux | grep bitcoin
     ps aux | grep doge
     ps aux | grep florin
     ```
     if not, run
     ```
+    /opt/bitcoin/bitcoind
     /opt/dogecoin/dogecoind
     /opt/florincoin/florincoind
     ```
@@ -31,6 +33,7 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
 
 6. Run:
     ```
+    tail -f /home/vagrant/.bitcoin/testnet3/debug.log
     tail -f /home/vagrant/.dogecoin/testnet3/debug.log
     tail -f /home/vagrant/.florincoin/debug.log
     ```
