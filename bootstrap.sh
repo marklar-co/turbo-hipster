@@ -5,6 +5,7 @@ set -o pipefail
 
 declare -r guest_log="/vagrant/guest_logs/vagrant_mmc_bootstrap.log"
 declare -r dogecoin_target_dir="/opt/dogecoin"
+declare -r bitcoin_target_dir="/opt/bitcoin"
 declare -r florincoin_target_dir="/opt/florincoin"
 
 echo "$0 will append logs to $guest_log"
@@ -48,6 +49,23 @@ apt-get install -y mysql-server-5.5
 echo_log "getting Python stuff"
 apt-get install -y python2.7 python-crypto python-mysqldb python-pip
 apt-get install -y python-dev # needed for things like building python profiling
+
+# bitcoin
+echo_log "prepping bitcoin stuff"
+sudo -u vagrant mkdir -p /home/vagrant/.bitcoin
+sudo -u vagrant cp /vagrant/bitcoin.conf /root/vagrant/.bitcoin/.
+mkdir "$bitcoin_target_dir"
+cp /vagrant/ThirdParty/bitcoin_bin/bitcoind "$bitcoin_target_dir/bitcoind"
+cp /vagrant/ThirdParty/bitcoin_bin/bitcoin-cli "$bitcoin_target_dir/bitcoin-cli"
+cp /vagrant/ThirdParty/bitcoin_bin/bitcoin-tx "$bitcoin_target_dir/bitcoin-tx"
+chown -R vagrant:vagrant "$bitcoin_target_dir"
+chmod 755 "$bitcoin_target_dir/bitcoind"
+chmod 755 "$bitcoin_target_dir/bitcoin-cli"
+chmod 755 "$bitcoin_target_dir/bitcoin-tx"
+echo_log "starting bitcoind"
+sudo -H -u vagrant "$bitcoin_target_dir/bitcoind" #note the -H... important
+echo "Sleeping a while to let bitcoind get going..."
+sleep 5
 
 # Florincoin - must build from source
 echo_log "getting dependencies to build florincoin"
