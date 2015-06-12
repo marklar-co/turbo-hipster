@@ -13,7 +13,7 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
     cd repos && git clone git@github.com:bitcoin-abe/bitcoin-abe.git
     ```
 
-3. I suggest you install VirtualBox (from a website download) then `brew install vagrant`, then try a [simple vagrant tutorial](http://docs.vagrantup.com/v2/getting-started/index.html) to familiarise yourself with it. It shouldn't take long, just spend like 10-20 minutes on this excluding time downloading VM images. Then run `vagrant up`. If you encounter any errors with vagrant up, save the terminal output and `guest_logs/vagrant_mmc_bootstrap.log`.
+3. Install VirtualBox (from a website download) then `brew install vagrant`, then try a [simple vagrant tutorial](http://docs.vagrantup.com/v2/getting-started/index.html) to familiarise yourself with it. It shouldn't take long, just spend like 10-20 minutes on this excluding time downloading VM images. Then run `vagrant up`. If you encounter any errors with vagrant up, save the terminal output and `guest_logs/vagrant_mmc_bootstrap.log`.
 
 4. If there were no problems, pop into your development VM by running `vagrant ssh`. From now on, all commands are run within the VM.
 
@@ -32,6 +32,7 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
 6. Run:
     ```
     tail -f /home/vagrant/.dogecoin/testnet3/debug.log
+    tail -f /home/vagrant/.florincoin/debug.log
     ```
     and look for lines like the following:
     ```
