@@ -4,6 +4,7 @@ set -o posix
 set -o pipefail
 
 declare -r guest_log="/vagrant/guest_logs/vagrant_mmc_bootstrap.log"
+declare -r litecoin_target_dir="/opt/litecoin"
 declare -r dogecoin_target_dir="/opt/dogecoin"
 declare -r bitcoin_target_dir="/opt/bitcoin"
 declare -r florincoin_target_dir="/opt/florincoin"
@@ -67,36 +68,49 @@ sudo -H -u vagrant "$bitcoin_target_dir/bitcoind" #note the -H... important
 echo "Sleeping a while to let bitcoind get going..."
 sleep 5
 
-# Florincoin - must build from source
-echo_log "getting dependencies to build florincoin"
-apt-get install -y build-essential libssl-dev libdb-dev libdb++-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
-echo_log "building florincoin"
-(cd /vagrant/ThirdParty/florincoin/src && make -f makefile.unix)
-sudo -u vagrant mkdir -p /home/vagrant/.florincoin
-sudo -u vagrant cp /vagrant/florincoin.conf /home/vagrant/.florincoin/.
-mkdir "$florincoin_target_dir"
-cp /vagrant/ThirdParty/florincoin/src/florincoind "$florincoin_target_dir/florincoind"
-chown -R vagrant:vagrant "$florincoin_target_dir"
-chmod 755 "$florincoin_target_dir/florincoind"
-echo_log "starting florincoind"
-sudo -H -u vagrant "$florincoin_target_dir/florincoind" #note the -H... important
-echo "Sleeping a while to let florincoind get going..."
+# litecoin
+echo_log "prepping litecoin stuff"
+sudo -u vagrant mkdir -p /home/vagrant/.litecoin
+sudo -u vagrant cp /vagrant/litecoin.conf /home/vagrant/.litecoin/.
+mkdir "$litecoin_target_dir"
+cp /vagrant/ThirdParty/litecoin_bin/litecoind "$litecoin_target_dir/litecoind"
+chown -R vagrant:vagrant "$litecoin_target_dir"
+chmod 755 "$litecoin_target_dir/litecoind"
+echo_log "starting litecoind"
+sudo -H -u vagrant "$litecoin_target_dir/litecoind" #note the -H... important
+echo "Sleeping a while to let litecoind get going..."
 sleep 5
 
-# Dogecoin
-echo_log "prepping dogecoin stuff"
-sudo -u vagrant mkdir -p /home/vagrant/.dogecoin
-sudo -u vagrant cp /vagrant/dogecoin.conf /home/vagrant/.dogecoin/.
-mkdir "$dogecoin_target_dir"
-cp /vagrant/ThirdParty/dogecoin_bin/dogecoind-1.8.2-linux64 "$dogecoin_target_dir/dogecoind"
-cp /vagrant/ThirdParty/dogecoin_bin/dogecoin-cli-1.8.2-linux64 "$dogecoin_target_dir/dogecoin-cli"
-chown -R vagrant:vagrant "$dogecoin_target_dir"
-chmod 755 "$dogecoin_target_dir/dogecoind"
-chmod 755 "$dogecoin_target_dir/dogecoin-cli"
-echo_log "starting dogecoind"
-sudo -H -u vagrant "$dogecoin_target_dir/dogecoind" #note the -H... important
-echo "Sleeping a while to let dogecoind get going..."
-sleep 5
+# # Florincoin - must build from source
+# echo_log "getting dependencies to build florincoin"
+# apt-get install -y build-essential libssl-dev libdb-dev libdb++-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
+# echo_log "building florincoin"
+# (cd /vagrant/ThirdParty/florincoin/src && make -f makefile.unix)
+# sudo -u vagrant mkdir -p /home/vagrant/.florincoin
+# sudo -u vagrant cp /vagrant/florincoin.conf /home/vagrant/.florincoin/.
+# mkdir "$florincoin_target_dir"
+# cp /vagrant/ThirdParty/florincoin/src/florincoind "$florincoin_target_dir/florincoind"
+# chown -R vagrant:vagrant "$florincoin_target_dir"
+# chmod 755 "$florincoin_target_dir/florincoind"
+# echo_log "starting florincoind"
+# sudo -H -u vagrant "$florincoin_target_dir/florincoind" #note the -H... important
+# echo "Sleeping a while to let florincoind get going..."
+# sleep 5
+
+# # Dogecoin
+# echo_log "prepping dogecoin stuff"
+# sudo -u vagrant mkdir -p /home/vagrant/.dogecoin
+# sudo -u vagrant cp /vagrant/dogecoin.conf /home/vagrant/.dogecoin/.
+# mkdir "$dogecoin_target_dir"
+# cp /vagrant/ThirdParty/dogecoin_bin/dogecoind-1.8.2-linux64 "$dogecoin_target_dir/dogecoind"
+# cp /vagrant/ThirdParty/dogecoin_bin/dogecoin-cli-1.8.2-linux64 "$dogecoin_target_dir/dogecoin-cli"
+# chown -R vagrant:vagrant "$dogecoin_target_dir"
+# chmod 755 "$dogecoin_target_dir/dogecoind"
+# chmod 755 "$dogecoin_target_dir/dogecoin-cli"
+# echo_log "starting dogecoind"
+# sudo -H -u vagrant "$dogecoin_target_dir/dogecoind" #note the -H... important
+# echo "Sleeping a while to let dogecoind get going..."
+# sleep 5
 
 # Prep abe
 echo_log "Set up DB"
