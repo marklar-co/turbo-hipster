@@ -53,7 +53,7 @@ apt-get install -y python-dev # needed for things like building python profiling
 # bitcoin
 echo_log "prepping bitcoin stuff"
 sudo -u vagrant mkdir -p /home/vagrant/.bitcoin
-sudo -u vagrant cp /vagrant/bitcoin.conf /root/vagrant/.bitcoin/.
+sudo -u vagrant cp /vagrant/bitcoin.conf /home/vagrant/.bitcoin/.
 mkdir "$bitcoin_target_dir"
 cp /vagrant/ThirdParty/bitcoin_bin/bitcoind "$bitcoin_target_dir/bitcoind"
 cp /vagrant/ThirdParty/bitcoin_bin/bitcoin-cli "$bitcoin_target_dir/bitcoin-cli"
