@@ -17,23 +17,26 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
 
 4. If there were no problems, pop into your development VM by running `vagrant ssh`. From now on, all commands are run within the VM.
 
-5. Check that dogecoind/florincoind is running, with
+5. Check that the daemons are running with
     ```
     ps aux | grep bitcoin
+    ps aux | grep lite
     ps aux | grep doge
     ps aux | grep florin
     ```
     if not, run
     ```
     /opt/bitcoin/bitcoind
+    /opt/dogecoin/litecoind
     /opt/dogecoin/dogecoind
     /opt/florincoin/florincoind
     ```
-    (it should run as a daemon).
+    (they should run as a daemons).
 
 6. Run:
     ```
     tail -f /home/vagrant/.bitcoin/testnet3/debug.log
+    tail -f /home/vagrant/.litecoin/testnet3/debug.log
     tail -f /home/vagrant/.dogecoin/testnet3/debug.log
     tail -f /home/vagrant/.florincoin/debug.log
     ```

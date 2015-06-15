@@ -4,6 +4,7 @@ set -o posix
 set -o pipefail
 
 declare -r guest_log="/vagrant/guest_logs/vagrant_mmc_bootstrap.log"
+declare -r litecoin_target_dir="/opt/litecoin"
 declare -r dogecoin_target_dir="/opt/dogecoin"
 declare -r bitcoin_target_dir="/opt/bitcoin"
 declare -r florincoin_target_dir="/opt/florincoin"
@@ -65,6 +66,19 @@ chmod 755 "$bitcoin_target_dir/bitcoin-tx"
 echo_log "starting bitcoind"
 sudo -H -u vagrant "$bitcoin_target_dir/bitcoind" #note the -H... important
 echo "Sleeping a while to let bitcoind get going..."
+sleep 5
+
+# litecoin
+echo_log "prepping litecoin stuff"
+sudo -u vagrant mkdir -p /home/vagrant/.litecoin
+sudo -u vagrant cp /vagrant/litecoin.conf /home/vagrant/.litecoin/.
+mkdir "$litecoin_target_dir"
+cp /vagrant/ThirdParty/litecoin_bin/litecoind "$litecoin_target_dir/litecoind"
+chown -R vagrant:vagrant "$litecoin_target_dir"
+chmod 755 "$litecoin_target_dir/litecoind"
+echo_log "starting litecoind"
+sudo -H -u vagrant "$litecoin_target_dir/litecoind" #note the -H... important
+echo "Sleeping a while to let litecoind get going..."
 sleep 5
 
 # Florincoin - must build from source
