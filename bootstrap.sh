@@ -68,12 +68,12 @@ sudo -H -u vagrant "$bitcoin_target_dir/bitcoind" #note the -H... important
 echo "Sleeping a while to let bitcoind get going..."
 sleep 5
 
-# litecoin
+# Litecoin
 echo_log "prepping litecoin stuff"
 sudo -u vagrant mkdir -p /home/vagrant/.litecoin
 sudo -u vagrant cp /vagrant/litecoin.conf /home/vagrant/.litecoin/.
 mkdir "$litecoin_target_dir"
-cp /vagrant/ThirdParty/litecoin_bin/litecoind "$litecoin_target_dir/litecoind"
+cp /vagrant/ThirdParty/litecoin_bin/litecoind-0.8.7.5-linux64 "$litecoin_target_dir/litecoind"
 chown -R vagrant:vagrant "$litecoin_target_dir"
 chmod 755 "$litecoin_target_dir/litecoind"
 echo_log "starting litecoind"
