@@ -87,7 +87,7 @@ apt-get install -y libboost-all-dev libdb-dev libdb++-dev libminiupnpc-dev
 sudo -u vagrant mkdir -p /home/vagrant/.florincoin
 sudo -u vagrant cp /vagrant/florincoin.conf /home/vagrant/.florincoin/.
 mkdir "$florincoin_target_dir"
-cp /vagrant/ThirdParty/florincoin_bin/florincoind "$florincoin_target_dir/florincoind"
+cp /vagrant/ThirdParty/florincoin_bin/florincoind-f62498c "$florincoin_target_dir/florincoind"
 chown -R vagrant:vagrant "$florincoin_target_dir"
 chmod 755 "$florincoin_target_dir/florincoind"
 echo_log "starting florincoind"
