@@ -81,21 +81,35 @@ sudo -H -u vagrant "$litecoin_target_dir/litecoind" #note the -H... important
 echo "Sleeping a while to let litecoind get going..."
 sleep 5
 
-# Florincoin - must build from source
-echo_log "getting dependencies to build florincoin"
-apt-get install -y build-essential libssl-dev libdb-dev libdb++-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
-echo_log "building florincoin"
-(cd /vagrant/ThirdParty/florincoin/src && make -f makefile.unix)
+# Florincoin - from binary
+echo_log "prepping florincoin stuff"
+apt-get install -y libboost-all-dev libdb-dev libdb++-dev libminiupnpc-dev
 sudo -u vagrant mkdir -p /home/vagrant/.florincoin
 sudo -u vagrant cp /vagrant/florincoin.conf /home/vagrant/.florincoin/.
 mkdir "$florincoin_target_dir"
-cp /vagrant/ThirdParty/florincoin/src/florincoind "$florincoin_target_dir/florincoind"
+cp /vagrant/ThirdParty/florincoin_bin/florincoind-f62498c "$florincoin_target_dir/florincoind"
 chown -R vagrant:vagrant "$florincoin_target_dir"
 chmod 755 "$florincoin_target_dir/florincoind"
 echo_log "starting florincoind"
 sudo -H -u vagrant "$florincoin_target_dir/florincoind" #note the -H... important
 echo "Sleeping a while to let florincoind get going..."
 sleep 5
+
+# # Florincoin - if we need to rebuild from source
+# echo_log "getting dependencies to build florincoin"
+# apt-get install -y build-essential libssl-dev libdb-dev libdb++-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
+# echo_log "building florincoin"
+# (cd /vagrant/ThirdParty/florincoin/src && make -f makefile.unix)
+# sudo -u vagrant mkdir -p /home/vagrant/.florincoin
+# sudo -u vagrant cp /vagrant/florincoin.conf /home/vagrant/.florincoin/.
+# mkdir "$florincoin_target_dir"
+# cp /vagrant/ThirdParty/florincoin/src/florincoind "$florincoin_target_dir/florincoind"
+# chown -R vagrant:vagrant "$florincoin_target_dir"
+# chmod 755 "$florincoin_target_dir/florincoind"
+# echo_log "starting florincoind"
+# sudo -H -u vagrant "$florincoin_target_dir/florincoind" #note the -H... important
+# echo "Sleeping a while to let florincoind get going..."
+# sleep 5
 
 # Dogecoin
 echo_log "prepping dogecoin stuff"
