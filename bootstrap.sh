@@ -131,11 +131,6 @@ echo_log "Set up DB"
 mysql -u root < /vagrant/setup_mysql.sql
 (cd /vagrant/ThirdParty/abe && python setup.py install)
 
-# add blockchain tools to path
-echo '' >> /home/vagrant/.bashrc
-echo '# add blockchain tools to path' >> /home/vagrant/.bashrc
-echo 'PATH=$PATH:/vagrant/tools' >> /home/vagrant/.bashrc
-
 echo_log "florincoind progress: $(tail /home/vagrant/.florincoin/testnet/debug.log || true)"
 echo_log "dogecoind progress: $(tail /home/vagrant/.dogecoin/testnet3/debug.log || true)"
 echo_log "current procs: $(ps -aux)"

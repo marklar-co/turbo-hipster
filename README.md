@@ -28,7 +28,7 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
     ```
     (they should run as a daemons).
 
-6. Check the progress of the node syncing the blockchain by running `chain_progress`. The output will be something like:
+6. Check the progress of the node syncing the blockchain by running `/vagrant/tools/chain_progress`. The output will be something like:
     ```
     {'chains': {'bitcoin_testnet': '0.000001',
                 'dogecoin_testnet': '0.608287',
