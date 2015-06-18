@@ -80,6 +80,8 @@ echo_log "starting litecoind"
 sudo -H -u vagrant "$litecoin_target_dir/litecoind" #note the -H... important
 echo "Sleeping a while to let litecoind get going..."
 sleep 5
+echo "Getting ltc-scrypt Python module for abe to work with Litecoin"
+pip install ltc-scrypt
 
 # Florincoin - from binary
 echo_log "prepping florincoin stuff"
