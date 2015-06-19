@@ -1,0 +1,47 @@
+#!/usr/bin/python
+#
+# A small tool to quickly check chain synch progress. Sample output:
+#
+#     {'chains': {'bitcoin_testnet': '0.863974',
+#                 'dogecoin_testnet': '0.918948',
+#                 'florincoin': '0.102656',
+#                 'litecoin_testnet': '0.693292'},
+#      'timestamp': 'Tue Jun 16 06:47:20 2015'}
+#
+
+import pprint
+import re
+import time
+
+# It would be nice to get this list from a shared config file or global environment variable. For now
+# they'll just be hardcoded here
+chain_nodes = [{'name':'bitcoin_testnet', 'debug_log':'/home/vagrant/.bitcoin/testnet3/debug.log'},
+               {'name':'dogecoin_testnet', 'debug_log':'/home/vagrant/.dogecoin/testnet3/debug.log'},
+               {'name':'litecoin_testnet', 'debug_log':'/home/vagrant/.litecoin/testnet3/debug.log'},
+               {'name':'florincoin', 'debug_log':'/home/vagrant/.florincoin/debug.log'}]
+
+current_progress = {'timestamp': time.asctime(),
+                    'chains': {}}
+
+for chain_node in chain_nodes:
+    status = {'progress': None, 'time': None}
+    try:
+        with open(chain_node['debug_log'], 'r') as debug_fd:
+            # seek to last 8K of file, since the logs can get quite big
+            debug_fd.seek (0, 2)
+            fsize = debug_fd.tell()
+            debug_fd.seek(max(fsize-8192, 0), 0)
+            lines = debug_fd.readlines()
+        for line in reversed(lines):
+            if 'progress=' in line:
+                match = re.search("progress=([0-9,\.]+)", line)
+                match_time = re.search("[0-9]{2}:[0-9]{2}:[0-9]{2}", line)
+                if match:
+                    status['progress'] = match.group(0)
+                if match_time:
+                    status['time'] = match_time.group(0)
+                break
+    finally:
+        current_progress['chains'][chain_node['name']] = status
+
+pprint.pprint(current_progress)

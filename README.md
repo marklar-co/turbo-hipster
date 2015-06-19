@@ -28,18 +28,15 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
     ```
     (they should run as a daemons).
 
-6. Run:
+6. Check the progress of the node syncing the blockchain by running `/vagrant/tools/chain_progress`. The output will be something like:
     ```
-    tail -f /home/vagrant/.bitcoin/testnet3/debug.log
-    tail -f /home/vagrant/.litecoin/testnet3/debug.log
-    tail -f /home/vagrant/.dogecoin/testnet3/debug.log
-    tail -f /home/vagrant/.florincoin/debug.log
+    {'chains': {'bitcoin_testnet': '0.000001',
+                'dogecoin_testnet': '0.608287',
+                'florincoin': None,
+                'litecoin_testnet': '0.474797'},
+      'timestamp': 'Wed Jun 17 08:58:16 2015'}
     ```
-    and look for lines like the following:
-    ```
-    2015-05-27 01:58:44 UpdateTip: new best=ffb3a4e9217c79fe8a40a2d879c7e03656afbacee39eb2dcbb17e83633890df9  height=631113  log2_work=43.524284  tx=1033363  date=2015-05-27 02:00:14 progress=1.000000
-    ```
-    Keep an eye on the progress indicator. I found that if there's been too little progress here, abe freaks out, so let it reach something like 95% before continuing to the next step.
+    Keep an eye on the progress indicators. If there's been too little progress here, abe freaks out, so let it reach something like 0.95 before continuing to the next step.
 
 7. Abe needs to be run in two phases; first in "init" mode where it reads the dogecoin data directly, then in "rpc" mode where it communicates with dogecoind through rpc. For both, make sure your current working directory is `/vagrant` so that the `abe-*.conf` files are in the working directory.
 
