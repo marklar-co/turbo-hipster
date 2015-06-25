@@ -25,7 +25,7 @@ class Florincoin(BaseChain):
         self.name = 'Florincoin'
         self.code3 = 'FLO'
         self.magic = "\u00fd\u00c0\u00a5\u00f1"
-        super(Florincoin, self).__init__(self, **kwargs)
+        BaseChain.__init__(self, **kwargs)
 
     @staticmethod
     def block_header_hash(header):
