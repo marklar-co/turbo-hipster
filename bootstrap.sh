@@ -124,5 +124,12 @@ echo_log "dogecoind progress: $(tail /home/vagrant/.dogecoin/testnet3/debug.log 
 echo_log "current procs: $(ps -aux)"
 echo_log "current df: $(df -h /)"
 
+# add blockchain tools to path
+sudo -u vagrant mkdir -p /home/vagrant/tools
+sudo -u cp /vagrant/tools/* /home/vagrant/tools
+echo '' >> /home/vagrant/.bashrc
+echo '# add blockchain tools to path' >> /home/vagrant/.bashrc
+echo 'PATH=$PATH:/home/vagrant/tools' >> /home/vagrant/.bashrc
+
 echo_log "complete"
 echo "$0 all done!"
