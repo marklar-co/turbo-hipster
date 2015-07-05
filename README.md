@@ -50,6 +50,8 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
     cd /vagrant/ThirdParty/abe && sudo python setup.py install
     ```
 
+    If you want to clear out Abe's database and reinstall, just run `abe_clean` from anywhere.
+
     and run abe in rpc mode again (step 8). Repeat ad infinitum!
 
 ##UPDATING NODE BINARIES

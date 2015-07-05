@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# abe_clean - clears Abe's database and reinstalls Abe
+
+#flush abe database
+mysql -u root -e 'drop database abe_db;'
+mysql -u root -e 'create database abe_db;'
+mysql -u root -e 'grant all on abe_db.* to abe_db_u;'
+
+#reinstall abe
+cd /vagrant/ThirdParty/abe
+sudo python setup.py install
