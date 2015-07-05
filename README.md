@@ -36,12 +36,12 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
 
 8. For "init" mode, run:
     ```
-    python -m Abe.abe --config conf/abe-init.conf --commit-bytes 100000 --no-serve
+    python -m Abe.abe --config /vagrant/conf/abe-init.conf --commit-bytes 100000 --no-serve
     ```
 
 9. Leave that for a couple of minutes, and then you shouldn't ever have to run it again. Then ctrl-c and run "rpc" mode with:
     ```
-    python -m Abe.abe --config conf/abe-rpc.conf --commit-bytes 100000 --no-serve
+    python -m Abe.abe --config /vagrant/conf/abe-rpc.conf --commit-bytes 100000 --no-serve
     ```
 
 10. Now play around with the system, and to stop abe simply ctrl-c. When you've made tweaks to the abe code, reinstall it:
