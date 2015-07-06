@@ -22,7 +22,7 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
     ```
     (they should run as a daemons).
 
-6. Check the progress of the node syncing the blockchain by running `/vagrant/tools/chain_progress`. The output will be something like:
+6. Check the progress of the node syncing the blockchain by running `chain_progress`. The output will be something like:
     ```
     {'chains': {'bitcoin_testnet': '0.000001',
                 'dogecoin_testnet': '0.608287',
@@ -49,6 +49,8 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
     ```
     cd /vagrant/ThirdParty/abe && sudo python setup.py install
     ```
+
+    If you want to clear out Abe's database and reinstall, just run `abe_clean` from anywhere.
 
     and run abe in rpc mode again (step 8). Repeat ad infinitum!
 
