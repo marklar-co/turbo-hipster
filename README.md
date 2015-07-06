@@ -32,16 +32,16 @@ turbo-hipster: a vagrant box for running abe and multiple blockchain nodes. Writ
     ```
     Keep an eye on the progress indicators. If there's been too little progress here, abe freaks out, so let it reach something like 0.95 before continuing to the next step.
 
-7. Abe needs to be run in two phases; first in "init" mode where it reads the dogecoin data directly, then in "rpc" mode where it communicates with dogecoind through rpc. For both, make sure your current working directory is `/vagrant` so that the `abe-*.conf` files are in the working directory.
+7. Abe needs to be run in two phases; first in "init" mode where it reads the dogecoin data directly, then in "rpc" mode where it communicates with dogecoind through rpc.
 
 8. For "init" mode, run:
     ```
-    python -m Abe.abe --config abe-init.conf --commit-bytes 100000 --no-serve
+    python -m Abe.abe --config /vagrant/conf/abe-init.conf --commit-bytes 100000 --no-serve
     ```
 
 9. Leave that for a couple of minutes, and then you shouldn't ever have to run it again. Then ctrl-c and run "rpc" mode with:
     ```
-    python -m Abe.abe --config abe-rpc.conf --commit-bytes 100000 --no-serve
+    python -m Abe.abe --config /vagrant/conf/abe-rpc.conf --commit-bytes 100000 --no-serve
     ```
 
 10. Now play around with the system, and to stop abe simply ctrl-c. When you've made tweaks to the abe code, reinstall it:

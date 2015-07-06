@@ -54,7 +54,7 @@ apt-get install -y python-dev # needed for things like building python profiling
 # Bitcoin
 echo_log "prepping bitcoin stuff"
 sudo -u vagrant mkdir -p /home/vagrant/.bitcoin
-sudo -u vagrant cp /vagrant/bitcoin.conf /home/vagrant/.bitcoin/.
+sudo -u vagrant cp /vagrant/conf/bitcoin.conf /home/vagrant/.bitcoin/.
 mkdir "$bitcoin_target_dir"
 cp /vagrant/ThirdParty/bitcoin_bin/bitcoind "$bitcoin_target_dir/bitcoind"
 cp /vagrant/ThirdParty/bitcoin_bin/bitcoin-cli "$bitcoin_target_dir/bitcoin-cli"
@@ -71,7 +71,7 @@ sleep 5
 # Litecoin
 echo_log "prepping litecoin stuff"
 sudo -u vagrant mkdir -p /home/vagrant/.litecoin
-sudo -u vagrant cp /vagrant/litecoin.conf /home/vagrant/.litecoin/.
+sudo -u vagrant cp /vagrant/conf/litecoin.conf /home/vagrant/.litecoin/.
 mkdir "$litecoin_target_dir"
 cp /vagrant/ThirdParty/litecoin_bin/litecoind-0.8.7.5-linux64 "$litecoin_target_dir/litecoind"
 chown -R vagrant:vagrant "$litecoin_target_dir"
@@ -87,7 +87,7 @@ pip install ltc-scrypt
 echo_log "prepping florincoin stuff"
 apt-get install -y libboost-all-dev libdb-dev libdb++-dev libminiupnpc-dev
 sudo -u vagrant mkdir -p /home/vagrant/.florincoin
-sudo -u vagrant cp /vagrant/florincoin.conf /home/vagrant/.florincoin/.
+sudo -u vagrant cp /vagrant/conf/florincoin.conf /home/vagrant/.florincoin/.
 mkdir "$florincoin_target_dir"
 cp /vagrant/ThirdParty/florincoin_bin/florincoind-f62498c "$florincoin_target_dir/florincoind"
 chown -R vagrant:vagrant "$florincoin_target_dir"
@@ -100,7 +100,7 @@ sleep 5
 # Dogecoin
 echo_log "prepping dogecoin stuff"
 sudo -u vagrant mkdir -p /home/vagrant/.dogecoin
-sudo -u vagrant cp /vagrant/dogecoin.conf /home/vagrant/.dogecoin/.
+sudo -u vagrant cp /vagrant/conf/dogecoin.conf /home/vagrant/.dogecoin/.
 mkdir "$dogecoin_target_dir"
 cp /vagrant/ThirdParty/dogecoin_bin/dogecoind-1.8.2-linux64 "$dogecoin_target_dir/dogecoind"
 cp /vagrant/ThirdParty/dogecoin_bin/dogecoin-cli-1.8.2-linux64 "$dogecoin_target_dir/dogecoin-cli"
