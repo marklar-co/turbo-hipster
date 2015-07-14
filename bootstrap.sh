@@ -126,7 +126,7 @@ echo_log "current df: $(df -h /)"
 
 # add blockchain tools to path
 sudo -u vagrant mkdir -p /home/vagrant/tools
-sudo -u cp /vagrant/tools/* /home/vagrant/tools
+sudo -u vagrant cp /vagrant/tools/* /home/vagrant/tools
 echo '' >> /home/vagrant/.bashrc
 echo '# add blockchain tools to path' >> /home/vagrant/.bashrc
 echo 'PATH=$PATH:/home/vagrant/tools' >> /home/vagrant/.bashrc
