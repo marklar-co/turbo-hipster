@@ -1,5 +1,5 @@
 *.swp
-.vagrant/
+.vagrant*
 guest_logs/
 .DS_Store
 .idea/
