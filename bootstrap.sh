@@ -52,6 +52,18 @@ echo '[smtp.gmail.com]:587    USERNAMEFILLME@gmail.com:PASSWORDFILLME' > /etc/po
 chmod 400 /etc/postfix/sasl_passwd
 postmap /etc/postfix/sasl_passwd
 echo_log "XXXXX EMAIL TEMPLATE CONF CREATED - PLEASE EDIT /etc/postfix/sasl_passwd XXXXX"
+echo_log "getting nagios"
+apt-get install -y nagios3 nagios-nrpe-plugin
+echo_log "setting up nagios"
+usermod -a -G nagios www-data
+chmod -R +x /var/lib/nagios3/
+htpasswd -b -c /etc/nagios3/htpasswd.users admin admin
+cp /vagrant/conf/system_bootstrap/etc/nagios3/nagios.cfg /etc/nagios3/nagios.cfg
+cp /vagrant/conf/system_bootstrap/etc/nagios3/cgi.cfg /etc/nagios3/cgi.cfg
+cp /vagrant/conf/system_bootstrap/etc/nagios3/commands.cfg /etc/nagios3/commands.cfg
+cp /vagrant/conf/system_bootstrap/etc/nagios3/conf.d/contacts_nagios2.cfg /etc/nagios3/conf.d/contacts_nagios2.cfg
+cp /vagrant/conf/system_bootstrap/etc/nagios3/conf.d/localhost_nagios2.cfg /etc/nagios3/conf.d/localhost_nagios2.cfg
+service nagios3 restart
 
 # MySQL
 echo_log "getting MySQL stuff"
