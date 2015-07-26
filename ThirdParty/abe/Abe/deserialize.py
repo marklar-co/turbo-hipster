@@ -78,7 +78,7 @@ def deserialize_TxOut(d, owner_keys=None):
     else: result += " Own: False"
   return result
 
-def parse_Transaction(vds, has_nTime=False):
+def parse_Transaction(vds, has_nTime=False, has_tx_comment=False):
   d = {}
   start_pos = vds.read_cursor
   d['version'] = vds.read_int32()
@@ -93,6 +93,20 @@ def parse_Transaction(vds, has_nTime=False):
   for i in xrange(n_vout):
     d['txOut'].append(parse_TxOut(vds))
   d['lockTime'] = vds.read_uint32()
+  if has_tx_comment and vds.read_cursor < len(vds.input):
+    # A serialized florincoin transactions should terminate with a 'compact size'
+    # and then a tx_comment. For null tx_comment, the 'compact size' should be zero.
+    #
+    # However, some florincoin transactions don't contain the compact size or tx_comment.
+    # If that's the case, we'll have reached the end of the DataStream already.
+    # read_compact_size will throw an error. Catch it here and don't add a tx_comment.
+    try:
+      tx_comment_len = vds.read_compact_size()
+      if tx_comment_len > 0:
+        # don't store null tx_comments
+        d['tx-comment'] = vds.read_bytes(tx_comment_len)
+    except:
+      pass
   d['__data__'] = vds.input[start_pos:vds.read_cursor]
   return d
 
