@@ -68,7 +68,6 @@ service nagios3 restart
 # MySQL
 echo_log "getting MySQL stuff"
 apt-get install -y mysql-client
-export DEBIAN_FRONTEND=noninteractive
 apt-get install -y mysql-server-5.5
 
 # Python stuff
