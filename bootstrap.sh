@@ -50,6 +50,7 @@ echo_log "tweaking postfix configuration"
 cat /vagrant/conf/system_bootstrap/etc/postfix/main.cf.append >> /etc/postfix/main.cf
 echo '[smtp.gmail.com]:587    USERNAMEFILLME@gmail.com:PASSWORDFILLME' > /etc/postfix/sasl_passwd
 chmod 400 /etc/postfix/sasl_passwd
+cp /etc/ssl/certs/Thawte_Premium_Server_CA.pem /etc/postfix/cacert.pem
 postmap /etc/postfix/sasl_passwd
 echo_log "XXXXX EMAIL TEMPLATE CONF CREATED - PLEASE EDIT /etc/postfix/sasl_passwd XXXXX"
 echo_log "getting nagios"

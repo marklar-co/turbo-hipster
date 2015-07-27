@@ -24,5 +24,4 @@ echo
 echo "If email transmission not successful, do the following:"
 echo "    1) Check /etc/postfix/sasl_passwd"
 echo "    2) sudo postmap /etc/postfix/sasl_passwd"
-echo "    3) cat /etc/ssl/certs/Thawte_Premium_Server_CA.pem | sudo tee -a /etc/postfix/cacert.pem (just in case)"
-echo "    4) sudo /etc/init.d/postfix reload"
+echo "    3) sudo /etc/init.d/postfix reload"
