@@ -1796,11 +1796,11 @@ store._ddl['txout_approx'],
                    store.intin(tx['lockTime']), tx['size']))
 
         # Import transaction comment
-        if 'tx-comment' in tx:
+        if 'txComment' in tx:
             store.sql("""
             INSERT INTO tx_comment (tx_hash, tx_comment)
             VALUES (?, ?)""",
-                  (dbhash, tx['tx-comment']))
+                  (dbhash, tx['txComment']))
 
         # Import transaction outputs.
         tx['value_out'] = 0
