@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Simple tool to test email sending. Required argument: destination email address.
+#
+set -Eeu
+set -o posix
+set -o pipefail
+
+declare -r sendto="$1"
+declare hostname
+declare datenow
+
+hostname="$(/bin/hostname)"
+datenow="$(/bin/date)"
+
+declare -r email_msg="Test mail from postfix; host=$hostname; date=$datenow; random=$RANDOM"
+
+echo "$email_msg" | mail -s "$hostname Test Postfix" "$sendto"
+
+echo
+echo "Check $sendto for the following message:"
+echo "$email_msg"
+echo
+echo "If email transmission not successful, do the following:"
+echo "    1) Check /etc/postfix/sasl_passwd"
+echo "    2) sudo postmap /etc/postfix/sasl_passwd"
+echo "    3) sudo /etc/init.d/postfix reload"
