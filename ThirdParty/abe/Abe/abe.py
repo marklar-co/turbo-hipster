@@ -36,6 +36,7 @@ import readconf
 import deserialize
 import util  # Added functions.
 import base58
+import heartbeat
 
 __version__ = version.__version__
 
@@ -2014,6 +2015,7 @@ def create_conf():
         "address_history_rows_max": None,
         "shortlink_type":           None,
         "pid_file":                 None,
+        "heartbeatlog_file":        None,
 
         "template":     DEFAULT_TEMPLATE,
         "template_vars": {
@@ -2096,9 +2098,14 @@ See abe.conf for commented examples.""")
             pid_fd.write(str(os.getpid()))
         os.chmod(args.pid_file, 0644)
 
+    if args.heartbeatlog_file:
+        heartbeat.init(args.heartbeatlog_file)
+
+    heartbeat.beep("calling make_store")
     store = make_store(args)
     if (not args.no_serve):
         serve(store)
+    heartbeat.normal_shutdown()
     return 0
 
 if __name__ == '__main__':

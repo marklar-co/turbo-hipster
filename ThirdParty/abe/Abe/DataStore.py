@@ -35,6 +35,7 @@ import BCDataStream
 import deserialize
 import util
 import base58
+import heartbeat
 
 SCHEMA_TYPE = "Abe"
 SCHEMA_VERSION = SCHEMA_TYPE + "39"
@@ -2663,6 +2664,7 @@ store._ddl['txout_approx'],
             # Import new blocks.
             rpc_hash = next_hash or get_blockhash(height)
             while rpc_hash is not None:
+                heartbeat.beep("rpc for chain {}".format(dircfg["chain_id"]))
                 hash = rpc_hash.decode('hex')[::-1]
 
                 if store.offer_existing_block(hash, chain.id):
@@ -2788,6 +2790,7 @@ store._ddl['txout_approx'],
             return
 
         while True:
+            heartbeat.beep("blk for chain {}".format(dircfg["chain_id"]))
             dircfg['blkfile_number'] = blkfile['number']
             ds = blkfile['stream']
             next_blkfile = None
