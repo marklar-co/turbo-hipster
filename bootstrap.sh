@@ -11,6 +11,7 @@ declare -r litecoin_target_dir="/opt/litecoin"
 declare -r dogecoin_target_dir="/opt/dogecoin"
 declare -r bitcoin_target_dir="/opt/bitcoin"
 declare -r florincoin_target_dir="/opt/florincoin"
+declare -r namecoin_target_dir="/opt/namecoin"
 
 echo "$0 will append logs to $guest_log"
 echo "$0 will install dogecoin to $dogecoin_target_dir"
@@ -134,6 +135,21 @@ chmod 755 "$dogecoin_target_dir/dogecoin-cli"
 echo_log "starting dogecoind"
 sudo -H -u vagrant "$dogecoin_target_dir/dogecoind" #note the -H... important
 echo "Sleeping a while to let dogecoind get going..."
+sleep 5
+
+# Namecoin
+echo_log "prepping namecoin stuff"
+cp /vagrant/ThirdParty/namecoin_deb/namecoin.list /etc/apt/sources.list.d/namecoin.list
+apt-get update
+apt-get install -y --force-yes namecoin
+sudo -u vagrant mkdir -p /home/vagrant/.namecoin
+sudo -u vagrant cp /vagrant/conf/namecoin.conf /home/vagrant/.namecoin/.
+mkdir "$namecoin_target_dir"
+ln -s /usr/bin/namecoind /opt/namecoin/namecoind
+chown -R vagrant:vagrant "$namecoin_target_dir"
+echo_log "starting namecoind"
+sudo -H -u vagrant "$namecoin_target_dir/namecoind" #note the -H... important
+echo "Sleeping a while to let namecoind get going..."
 sleep 5
 
 # Prep abe
