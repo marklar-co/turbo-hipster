@@ -2013,6 +2013,7 @@ def create_conf():
         "logging":                  None,
         "address_history_rows_max": None,
         "shortlink_type":           None,
+        "pid_file":                 None,
 
         "template":     DEFAULT_TEMPLATE,
         "template_vars": {
@@ -2086,6 +2087,14 @@ See abe.conf for commented examples.""")
 
     if args.auto_agpl:
         import tarfile
+
+    if args.pid_file:
+        pid_dir_name = os.path.dirname(args.pid_file)
+        if not os.path.exists(pid_dir_name):
+            os.makedirs(pid_dir_name)
+        with open(args.pid_file, "w") as pid_fd:
+            pid_fd.write(str(os.getpid()))
+        os.chmod(args.pid_file, 0644)
 
     store = make_store(args)
     if (not args.no_serve):
