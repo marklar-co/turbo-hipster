@@ -1,0 +1,141 @@
+#!/usr/bin/env python
+"""
+Check status of Abe process, primarily for monitoring of Abe in production.
+May be run standalone, but implemented as a Nagios plugin.
+"""
+import argparse
+import logging
+import nagiosplugin
+import psutil
+import re
+import time
+
+nlogger = logging.getLogger('nagiosplugin')
+
+
+def check_pid(pid):
+    """
+    Check if the process specified is in a healthy state.
+    """
+    try:
+        return psutil.Process(pid)
+    except psutil.NoSuchProcess:
+        return None
+
+
+def get_file_tail(src_file, tail_bytes=8192):
+    """
+    Get last tail_bytes of a file; a tail-like read. Returns an array of lines.
+    """
+    with open(src_file, "r") as src_fd:
+        # seek to last 8K of file, since the logs can get quite big
+        src_fd.seek(0, 2)
+        fsize = src_fd.tell()
+        src_fd.seek(max(fsize-tail_bytes, 0), 0)
+        lines = src_fd.readlines()
+    return lines
+
+
+class AbeStatus(nagiosplugin.Resource):
+    """
+    Check Abe status based on pid file and heartbeat trace file.
+    """
+
+    abe_hearbeat_timestamp_pattern = r"\[\d+\]\s+\[Abe.heartbeat\]\s+\[(.+)]\s\[[A-Z]+\]\s+-\s+.*"
+
+    def __init__(self, pid_file, heartbeat_file, hb_read_retry_wait_time=2):
+        self.heartbeat_file = heartbeat_file
+        with open(pid_file, "r") as pid_fd:
+            self.abe_pid = int(pid_fd.read())
+        try:
+            self.trace_tail = get_file_tail(heartbeat_file)
+        except IOError:
+            # might be racing with rotation, so try again
+            nlogger.warn("Failed to read %s; retrying in %d secs...", heartbeat_file, hb_read_retry_wait_time)
+            time.sleep(hb_read_retry_wait_time)
+            self.trace_tail = get_file_tail(heartbeat_file)
+
+    def probe(self):
+
+        nlogger.info("expected abe pid: %d", self.abe_pid)
+        nlogger.debug("heartbeat trace tail: %s", self.trace_tail)
+
+        ps_abe = check_pid(self.abe_pid)
+
+        if not ps_abe:
+            nlogger.warn("process %d not found", self.abe_pid)
+            abe_stopped_normally = self.check_abe_heartbeat_normal_stop()
+            if abe_stopped_normally:
+                return [nagiosplugin.Metric("process {} stopped normally (\"{}\")".format(self.abe_pid, self.trace_tail[-1].rstrip()),
+                                            True, context='timeSinceHeartBeat')]
+            else:
+                return [nagiosplugin.Metric("process {} stopped without normal termination heartbeat".format(self.abe_pid),
+                                            None, context='timeSinceHeartBeat')]
+        else:
+            nlogger.debug("process %d found, status: %s", self.abe_pid, ps_abe)
+            now = time.localtime()
+            last_hb_time = self.last_abe_heartbeat_timestamp()
+            nlogger.info("Last heatbeat timestamp: %s", last_hb_time)
+            secs_since_last_hb = time.mktime(now) - time.mktime(last_hb_time)
+            return [nagiosplugin.Metric('secs since last heartbeat', secs_since_last_hb, context='timeSinceHeartBeat')]
+
+    def check_abe_heartbeat_normal_stop(self):
+        """
+        Check if the Abe heartbeat trace file indicates normal termination.
+        """
+        return "ABE HEARBEAT NORMAL SHUTDOWN" in self.trace_tail[-1]
+
+    def last_abe_heartbeat_timestamp(self):
+        """
+        Return the most recent timestamp occuring in an Abe heartbeat trace file.
+        """
+        timestamps = []
+        for line in self.trace_tail:
+            timestamp = self.get_timestamp_from_abe_hb_line(line)
+            if timestamp:
+                timestamps.append(timestamp)
+        nlogger.debug("Extracted timestamps: %s", timestamps)
+        if len(timestamps) >= 2:
+            # try to avoid the last line entry in case it was malformed
+            return timestamps[-2]
+        else:
+            return timestamps[-1]
+
+    def get_timestamp_from_abe_hb_line(self, line):
+        """
+        Extract the timestamp from a single Abe heartbeat trace line.
+        """
+        match_line = re.match(self.abe_hearbeat_timestamp_pattern, line)
+        if match_line:
+            asctime = match_line.group(1)
+            time_fmt = "%Y-%m-%d %H:%M:%S,%f"
+            return time.strptime(asctime, time_fmt)
+        else:
+            return None
+
+
+@nagiosplugin.guarded
+def main():
+    """
+    Check Abe status based on pid file and heartbeat trace file.
+    """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("pidFile", type=str, help="File containing Abe PID.")
+    parser.add_argument("heartBeatFile", type=str, help="File containing Abe heartbeat log file.")
+    parser.add_argument('-w', '--warning', default=30, type=int,
+                        help='Warning threshold for time since last heartbeat')
+    parser.add_argument('-c', '--critical', default=90, type=int,
+                        help='Critical threshold for time since last heartbeat')
+    parser.add_argument('-v', '--verbose', action='count', default=0)
+
+    args = parser.parse_args()
+    assert args.critical >= args.warning, "Invalid settings: --critical={}, --warning={} (critical level must be >= warning level".format(args.critical, args.warning)
+
+    check = nagiosplugin.Check(
+        AbeStatus(args.pidFile, args.heartBeatFile),
+        nagiosplugin.ScalarContext('timeSinceHeartBeat', args.warning, args.critical)
+    )
+    check.main(args.verbose)
+
+if __name__ == "__main__":
+    main()
