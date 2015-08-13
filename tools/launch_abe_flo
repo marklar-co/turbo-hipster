@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+# Reference launcher script for Abe - Florincoin
+#
+set -Eeux
+nohup python -m Abe.abe --config /vagrant/conf/abe-rpc.conf --no-serve --commit-bytes 100000 --pid-file /var/run/abe/abe_flo.pid --heartbeatlog-file /var/run/abe/abe_flo.hb.log &
