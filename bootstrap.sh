@@ -7,10 +7,13 @@ set -o pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 declare -r guest_log="/vagrant/guest_logs/vagrant_mmc_bootstrap.log"
+
 declare -r litecoin_target_dir="/opt/litecoin"
 declare -r dogecoin_target_dir="/opt/dogecoin"
 declare -r bitcoin_target_dir="/opt/bitcoin"
 declare -r florincoin_target_dir="/opt/florincoin"
+
+declare -r abe_support_dir="/opt/abe_support"
 
 echo "$0 will append logs to $guest_log"
 echo "$0 will install dogecoin to $dogecoin_target_dir"
@@ -140,6 +143,13 @@ sleep 5
 echo_log "Set up DB"
 mysql -u root < /vagrant/setup_mysql.sql
 (cd /vagrant/ThirdParty/abe && python setup.py install)
+mkdir -p "$abe_support_dir"
+echo_log "Prep monitoring"
+pip install nagiosplugin psutil
+cp /vagrant/ThirdParty/abe/tools/abe_status "$abe_support_dir"/
+mkdir /var/run/abe
+chown -R vagrant:vagrant /var/run/abe
+
 
 echo_log "bitcoind progress: $(tail /home/vagrant/.bitcoin/testnet/debug.log || true)"
 echo_log "litecoind progress: $(tail /home/vagrant/.litecoin/testnet3/debug.log || true)"
