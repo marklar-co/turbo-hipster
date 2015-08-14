@@ -64,12 +64,15 @@ class AbeStatus(nagiosplugin.Resource):
 
         if not ps_abe:
             nlogger.warn("process %d not found", self.abe_pid)
-            abe_stopped_normally = self.check_abe_heartbeat_normal_stop()
+
+            last_hb_line = self.trace_tail[-1].rstrip()
+            abe_stopped_normally = "ABE HEARBEAT NORMAL SHUTDOWN" in last_hb_line
+
             if abe_stopped_normally:
-                return [nagiosplugin.Metric("process {} stopped normally (last heartbeat: \"{}\")".format(self.abe_pid, self.trace_tail[-1].rstrip()),
+                return [nagiosplugin.Metric("process {} stopped normally (last heartbeat: \"{}\")".format(self.abe_pid, last_hb_line),
                                             True, context='timeSinceHeartBeat')]
             else:
-                return [nagiosplugin.Metric("process {} stopped without normal termination heartbeat (last heartbeat: \"{}\"".format(self.abe_pid, self.trace_tail[-1].rstrip()),
+                return [nagiosplugin.Metric("process {} stopped without normal termination heartbeat (last heartbeat: \"{}\"".format(self.abe_pid, last_hb_line),
                                             None, context='timeSinceHeartBeat')]
         else:
             nlogger.debug("process %d found, status: %s", self.abe_pid, ps_abe)
@@ -79,12 +82,6 @@ class AbeStatus(nagiosplugin.Resource):
             secs_since_last_hb = time.mktime(now) - time.mktime(last_hb_time)
             return [nagiosplugin.Metric("process {} exists, seconds since last heartbeat".format(self.abe_pid),
                                         secs_since_last_hb, context='timeSinceHeartBeat')]
-
-    def check_abe_heartbeat_normal_stop(self):
-        """
-        Check if the Abe heartbeat trace file indicates normal termination.
-        """
-        return "ABE HEARBEAT NORMAL SHUTDOWN" in self.trace_tail[-1]
 
     def last_abe_heartbeat_timestamp(self):
         """
