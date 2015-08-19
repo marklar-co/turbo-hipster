@@ -156,6 +156,7 @@ MAX_UNSPENT_ADDRESSES = 200
 def make_store(args):
     store = DataStore.new(args)
     if (not args.no_load):
+        heartbeat.beep("calling store.catch_up")
         store.catch_up()
     return store
 
@@ -247,6 +248,7 @@ class Abe:
                 # for a response!  XXX Could use threads, timers, or a
                 # cron job.
                 abe.store.catch_up()
+                heartbeat.hibernate()
 
             handler(page)
         except PageNotFound:
@@ -2101,9 +2103,10 @@ See abe.conf for commented examples.""")
     if args.heartbeatlog_file:
         heartbeat.init(args.heartbeatlog_file)
 
-    heartbeat.beep("calling make_store")
     store = make_store(args)
     if (not args.no_serve):
+        heartbeat.beep("calling serve(store)")
+        heartbeat.hibernate()
         serve(store)
     heartbeat.normal_shutdown()
     return 0

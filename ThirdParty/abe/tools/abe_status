@@ -61,12 +61,12 @@ class AbeStatus(nagiosplugin.Resource):
         nlogger.debug("heartbeat trace tail: %s", self.trace_tail)
 
         ps_abe = check_pid(self.abe_pid)
+        last_hb_line = self.trace_tail[-1].rstrip()
 
         if not ps_abe:
             nlogger.warn("process %d not found", self.abe_pid)
 
-            last_hb_line = self.trace_tail[-1].rstrip()
-            abe_stopped_normally = "ABE HEARBEAT NORMAL SHUTDOWN" in last_hb_line
+            abe_stopped_normally = "ABE HEARTBEAT NORMAL SHUTDOWN" in last_hb_line
 
             if abe_stopped_normally:
                 return [nagiosplugin.Metric("process {} stopped normally (last heartbeat: \"{}\")".format(self.abe_pid, last_hb_line),
@@ -76,12 +76,19 @@ class AbeStatus(nagiosplugin.Resource):
                                             None, context='timeSinceHeartBeat')]
         else:
             nlogger.debug("process %d found, status: %s", self.abe_pid, ps_abe)
-            now = time.localtime()
-            last_hb_time = self.last_abe_heartbeat_timestamp()
-            nlogger.info("Last heatbeat timestamp: %s", last_hb_time)
-            secs_since_last_hb = time.mktime(now) - time.mktime(last_hb_time)
-            return [nagiosplugin.Metric("process {} exists, seconds since last heartbeat".format(self.abe_pid),
-                                        secs_since_last_hb, context='timeSinceHeartBeat')]
+
+            abe_hibernating = "ABE HEARTBEAT HIBERNATE" in last_hb_line
+
+            if abe_hibernating:
+                return [nagiosplugin.Metric("process {} exists, but last heartbeat was HIBERNATE".format(self.abe_pid),
+                                            True, context='timeSinceHeartBeat')]
+            else:
+                now = time.localtime()
+                last_hb_time = self.last_abe_heartbeat_timestamp()
+                nlogger.info("Last heatbeat timestamp: %s", last_hb_time)
+                secs_since_last_hb = time.mktime(now) - time.mktime(last_hb_time)
+                return [nagiosplugin.Metric("process {} exists, seconds since last heartbeat".format(self.abe_pid),
+                                            secs_since_last_hb, context='timeSinceHeartBeat')]
 
     def last_abe_heartbeat_timestamp(self):
         """

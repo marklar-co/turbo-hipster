@@ -34,8 +34,9 @@ import os
 import time
 
 # pre-defined messages
-NORMAL_SHUTDOWN_MSG = "ABE HEARBEAT NORMAL SHUTDOWN"
-HELLO_WORLD_MSG = "ABE HEARBEAT HELLO WORLD"
+HIBERNATE_MSG = "ABE HEARTBEAT HIBERNATE"
+NORMAL_SHUTDOWN_MSG = "ABE HEARTBEAT NORMAL SHUTDOWN"
+HELLO_WORLD_MSG = "ABE HEARTBEAT HELLO WORLD"
 
 # for rate limiting
 MSGS_PER_SEC = 3
@@ -133,3 +134,15 @@ def normal_shutdown():
     normal/graceful.
     """
     beep(NORMAL_SHUTDOWN_MSG, lvl=logging.CRITICAL)
+
+
+def hibernate():
+    """
+    Convenience wrapper around 'beep' - as a convention call this only when the
+    program is about to enter a sleep/polling loop, to indicate that a lack of
+    subequent heartbeats should not be interpreted as a problem.
+
+    Note that there is no corresponding 'wakeup' method because any following
+    non-hibernate beep is effectively a wakeup.
+    """
+    beep(HIBERNATE_MSG, lvl=logging.CRITICAL)
