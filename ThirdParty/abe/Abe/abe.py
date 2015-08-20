@@ -211,6 +211,7 @@ class Abe:
             abe.shortlink_type = 10
 
     def __call__(abe, env, start_response):
+        heartbeat.beep("serve call")
         import urlparse
 
         page = {
@@ -241,7 +242,9 @@ class Abe:
 
         try:
             if handler is None:
-                return abe.serve_static(cmd + env['PATH_INFO'], start_response)
+                ret = abe.serve_static(cmd + env['PATH_INFO'], start_response)
+                heartbeat.hibernate()
+                return ret
 
             if (not abe.args.no_load):
                 # Always be up-to-date, even if we means having to wait
@@ -261,8 +264,10 @@ class Abe:
                 '<p class="error">'
                 'Sorry, I don\'t know about that chain!</p>\n']
         except Redirect:
+            heartbeat.hibernate()
             return redirect(page)
         except Streamed:
+            heartbeat.hibernate()
             return ''
         except Exception:
             abe.store.rollback()
@@ -284,6 +289,7 @@ class Abe:
         content = page['template'] % tvars
         if isinstance(content, unicode):
             content = content.encode('UTF-8')
+        heartbeat.hibernate()
         return content
 
     def get_handler(abe, cmd):

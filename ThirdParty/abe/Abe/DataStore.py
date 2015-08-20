@@ -2525,6 +2525,7 @@ store._ddl['txout_approx'],
 
     def catch_up(store):
         for dircfg in store.datadirs:
+            heartbeat.beep("catch_up dircfg:{}".format(dircfg))
             try:
                 loader = dircfg['loader'] or store.default_loader
                 if loader == "blkfile":
@@ -2551,6 +2552,7 @@ store._ddl['txout_approx'],
         requires the txindex configuration option.  Requires chain_id
         in the datadir table.
         """
+        heartbeat.beep("catch_up_rpc")
         chain_id = dircfg['chain_id']
         if chain_id is None:
             store.log.debug("no chain_id")
@@ -2737,6 +2739,7 @@ store._ddl['txout_approx'],
 
     # Load all blocks starting at the current file and offset.
     def catch_up_dir(store, dircfg):
+        heartbeat.beep("catch_up_dir")
         def open_blkfile(number):
             store._refresh_dircfg(dircfg)
             blkfile = {
