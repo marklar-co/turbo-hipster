@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+usage="$(basename "$0") coin - stop coin node
+
+where:
+    coin is the coin to stop"
+
+~vagrant/tools/coin_utils -c $1 -f stop

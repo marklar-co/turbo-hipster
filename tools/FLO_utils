@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -Eeu
+set -o posix
+set -o pipefail
+
+declare -r florincoin_target_dir="/opt/florincoin"
+declare -r coin_log="/vagrant/guest_logs/florincoin.log"
+
+declare -r exe_name="$0"
+echo_log() {
+    local log_target="$coin_log"
+    echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $exe_name: $@" >> $log_target
+}
+
+function error
+{
+    echo "$1" 1>&2
+    exit 1
+}
+
+function coin_install {
+    set -x
+    echo_log "prepping florincoin stuff"
+    apt-get install -y libboost-all-dev libdb-dev libdb++-dev libminiupnpc-dev
+    sudo -u vagrant mkdir -p /home/vagrant/.florincoin
+    sudo -u vagrant cp /vagrant/conf/florincoin.conf /home/vagrant/.florincoin/.
+    mkdir "$florincoin_target_dir"
+    cp /vagrant/ThirdParty/florincoin_bin/florincoind-f62498c "$florincoin_target_dir/florincoind"
+    chown -R vagrant:vagrant "$florincoin_target_dir"
+    chmod 755 "$florincoin_target_dir/florincoind"
+}
+
+function coin_start {
+    set -x
+    echo_log "starting florincoind"
+    sudo -H -u vagrant "$florincoin_target_dir/florincoind" #note the -H... important
+    echo "Sleeping a while to let florincoind get going..."
+    sleep 5
+}
+
+function coin_stop {
+    echo_log "stopping florincoind"
+    pkill -9 florincoind
+}
+
+function coin_status {
+    echo "florincoind progress: $(tail /home/vagrant/.florincoin/debug.log || true)"
+}
+
+function coin_backup {
+    error "coin_backup not yet implemented"
+}
+
+function coin_restore {
+    error "coin_restore not yet implemented"
+}
+
+function coin_abe_start {
+    error "coin_abe_start not yet implemented"
+}
+
+function coin_abe_stop {
+    error "coin_abe_stop not yet implemented"
+}
+
+if [ -z "$1" ]
+  then
+    error "No argument supplied"
+fi
+
+case "$1" in
+  "install") coin_install ;;
+  "start") coin_start ;;
+  "stop") coin_stop ;;
+  "status") coin_status ;;
+  "backup") coin_backup ;;
+  "restore") coin_restore ;;
+  "abe_start") coin_abe_start ;;
+  "abe_stop") coin_abe_stop ;;
+  *) error "Unexpected function" ;;
+esac

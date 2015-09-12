@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+usage="$(basename "$0") coin - check coin node status
+
+where:
+    coin is the coin to check"
+
+~vagrant/tools/coin_utils -c $1 -f status

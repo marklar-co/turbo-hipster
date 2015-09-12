@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -Eeux
+set -o posix
+set -o pipefail
+
+declare -r _coin_target_dir="/opt/_coin"
+declare -r coin_log="/vagrant/guest_logs/_coin.log"
+
+declare -r exe_name="$0"
+echo_log() {
+    local log_target="$coin_log"
+    echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $exe_name: $@" >> $log_target
+}
+
+function error
+{
+    echo "$1" 1>&2
+    exit 1
+}
+
+function coin_install {
+    error "coin_install not yet implemented"
+}
+
+function coin_start {
+    error "coin_start not yet implemented"
+}
+
+function coin_stop {
+    error "coin_stop not yet implemented"
+}
+
+function coin_status {
+    error "coin_status not yet implemented"
+}
+
+function coin_backup {
+    error "coin_backup not yet implemented"
+}
+
+function coin_restore {
+    error "coin_restore not yet implemented"
+}
+
+function coin_abe_start {
+    error "coin_abe_start not yet implemented"
+}
+
+function coin_abe_stop {
+    error "coin_abe_stop not yet implemented"
+}
+
+if [ -z "$1" ]
+  then
+    error "No argument supplied"
+fi
+
+case "$1" in
+  "install") coin_install ;;
+  "start") coin_start ;;
+  "stop") coin_stop ;;
+  "status") coin_status ;;
+  "backup") coin_backup ;;
+  "restore") coin_restore ;;
+  "abe_start") coin_abe_start ;;
+  "abe_stop") coin_abe_stop ;;
+  *) error "Unexpected function" ;;
+esac

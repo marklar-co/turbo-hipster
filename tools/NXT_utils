@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+set -Eeux
+set -o posix
+set -o pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+
+declare -r nxtcoin_target_dir="/opt/nxtcoin"
+declare -r coin_log="/vagrant/guest_logs/nxtcoin.log"
+
+declare -r exe_name="$0"
+echo_log() {
+    local log_target="$coin_log"
+    echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $exe_name: $@" >> $log_target
+}
+
+function error
+{
+    echo "$1" 1>&2
+    exit 1
+}
+
+function coin_install {
+    set -x
+    sudo -u vagrant mkdir -p /home/vagrant/.nxtcoin
+    mkdir "$nxtcoin_target_dir"
+    apt-get install unzip
+    cd "$nxtcoin_target_dir"
+    wget https://bitbucket.org/JeanLucPicard/nxt/downloads/nxt-client-1.5.15.zip
+    unzip nxt-client-1.5.15.zip
+
+    # get jdk version 8
+    add-apt-repository ppa:webupd8team/java
+    apt-get update
+    # tell oracle that we've seen and accepted their licence
+    echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+    echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+    # now get jdk8
+    apt-get -y install oracle-java8-installer
+}
+
+function coin_start {
+    set -x
+    echo_log "starting nxtcoind"
+    cd "$nxtcoin_target_dir"
+    ./run.sh
+    # don't know how to run this as a daemon yet
+    echo "Sleeping a while to let nxtcoind get going..."
+    sleep 5
+}
+
+function coin_stop {
+    error "coin_stop not yet implemented"
+}
+
+function coin_status {
+    error "coin_status not yet implemented"
+}
+
+function coin_backup {
+    error "coin_backup not yet implemented"
+}
+
+function coin_restore {
+    error "coin_restore not yet implemented"
+}
+
+function coin_abe_start {
+    error "coin_abe_start not yet implemented"
+}
+
+function coin_abe_stop {
+    error "coin_abe_stop not yet implemented"
+}
+
+if [ -z "$1" ]
+  then
+    error "No argument supplied"
+fi
+
+case "$1" in
+  "install") coin_install ;;
+  "start") coin_start ;;
+  "stop") coin_stop ;;
+  "status") coin_status ;;
+  "backup") coin_backup ;;
+  "restore") coin_restore ;;
+  "abe_start") coin_abe_start ;;
+  "abe_stop") coin_abe_stop ;;
+  *) error "Unexpected function" ;;
+esac
