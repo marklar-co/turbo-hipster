@@ -1,8 +1,3 @@
 #!/usr/bin/env bash
 
-usage="$(basename "$0") coin - start coin node
-
-where:
-    coin is the coin to start"
-
-~vagrant/tools/coin_utils -c $1 -f start
+~vagrant/tools/coin_utils -c "$1" -f start

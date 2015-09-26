@@ -14,8 +14,7 @@ echo_log() {
     echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $exe_name: $@" >> $log_target
 }
 
-function error
-{
+function error {
     echo "$1" 1>&2
     exit 1
 }
@@ -73,8 +72,7 @@ function coin_abe_stop {
     error "coin_abe_stop not yet implemented"
 }
 
-if [ -z "$1" ]
-  then
+if [ -z "$1" ]; then
     error "No argument supplied"
 fi
 

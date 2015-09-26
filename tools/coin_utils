@@ -51,11 +51,11 @@ case "${coin_function}" in
 esac
 
 case "${coin}" in
-  "BTC") sudo ~vagrant/tools/BTC_utils $coin_function ;;
-  "LTC") sudo ~vagrant/tools/LTC_utils $coin_function ;;
-  "DOG") sudo ~vagrant/tools/DOG_utils $coin_function ;;
-  "FLO") sudo ~vagrant/tools/FLO_utils $coin_function ;;
-  "NMC") sudo ~vagrant/tools/NMC_utils $coin_function ;;
-  "NXT") sudo ~vagrant/tools/NXT_utils $coin_function ;;
+  "BTC") sudo ~vagrant/tools/BTC_utils "$coin_function" ;;
+  "LTC") sudo ~vagrant/tools/LTC_utils "$coin_function" ;;
+  "DOG") sudo ~vagrant/tools/DOG_utils "$coin_function" ;;
+  "FLO") sudo ~vagrant/tools/FLO_utils "$coin_function" ;;
+  "NMC") sudo ~vagrant/tools/NMC_utils "$coin_function" ;;
+  "NXT") sudo ~vagrant/tools/NXT_utils "$coin_function" ;;
   *) error "Unexpected coin ${coin}" ;;
 esac

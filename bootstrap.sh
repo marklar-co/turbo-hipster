@@ -6,6 +6,9 @@ set -o pipefail
 # Suppress dialogs when installing things
 export DEBIAN_FRONTEND=noninteractive
 
+# read config file
+. /vagrant/conf/th.conf
+
 # Set up logging
 declare -r guest_log="/vagrant/guest_logs/vagrant_mmc_bootstrap.log"
 echo "$0 will append logs to $guest_log"
@@ -47,24 +50,21 @@ cat >>/home/vagrant/.bashrc <<EOL
 PATH=$PATH:/home/vagrant/tools
 EOL
 
-# read config file
-. /vagrant/conf/th.conf
-
 #Install coins
 IFS="," read -ra COINS <<< "$INSTALL_COINS"
 for COIN in "${COINS[@]}"; do
-    ~vagrant/tools/coin_install $COIN
+    ~vagrant/tools/coin_install "$COIN"
 done
 
 #Run coins
 IFS="," read -ra COINS <<< "$RUN_COINS"
 for COIN in "${COINS[@]}"; do
-    ~vagrant/tools/coin_start $COIN
+    ~vagrant/tools/coin_start "$COIN"
 done
 
 #Check coin status
 for COIN in "${COINS[@]}"; do
-    ~vagrant/tools/coin_status $COIN
+    ~vagrant/tools/coin_status "$COIN"
 done
 
 # Install Abe & dependencies
