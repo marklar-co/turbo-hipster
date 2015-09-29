@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+usage="$(basename "$0") [-h] [-c n] - utility functions for coins
+
+where:
+    -h  show this help text
+    -c  specify the coin. Valid options are:
+
+        - BTC for bitcoin
+        - LTC for litecoin
+        - DOG for dogecoin
+        - FLO for florincoin
+        - NMC for namecoin
+        - NXT for nextcoin
+
+    -f specify the fuction. Valid options are:
+
+        - install
+        - start
+        - stop
+        - status
+        - backup (not yet implemented)
+        - restore (not yet implemented)
+        - start_abe (not yet implemented)
+        - stop_abe (not yet implemented)"
+
+function error
+{
+    echo "$1" 1>&2
+    exit 1
+}
+
+coin=''
+while getopts 'c:f:h' flag; do
+  case "${flag}" in
+    h) echo "$usage"
+       exit
+       ;;
+    c) coin="${OPTARG}" ;;
+    f) coin_function="${OPTARG}" ;;
+    *) error "Unexpected option" ;;
+  esac
+done
+
+case "${coin_function}" in
+  "install") echo "Installing $coin" ;;
+  "start") echo "Starting $coin" ;;
+  "stop") echo "Stopping $coin" ;;
+  "status") ;;
+  *) error "Unexpected function ${coin_function}" ;;
+esac
+
+case "${coin}" in
+  "BTC") sudo ~vagrant/tools/BTC_utils "$coin_function" ;;
+  "LTC") sudo ~vagrant/tools/LTC_utils "$coin_function" ;;
+  "DOG") sudo ~vagrant/tools/DOG_utils "$coin_function" ;;
+  "FLO") sudo ~vagrant/tools/FLO_utils "$coin_function" ;;
+  "NMC") sudo ~vagrant/tools/NMC_utils "$coin_function" ;;
+  "NXT") sudo ~vagrant/tools/NXT_utils "$coin_function" ;;
+  *) error "Unexpected coin ${coin}" ;;
+esac
